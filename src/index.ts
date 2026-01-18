@@ -736,9 +736,10 @@ async function handleResponseMessage(
     if (generatedResponse.error) await message.reply(generatedResponse.error);
   } else {
     // Here we send a normal message without pinging the user
-    if (generatedResponse.message) await message.channel.send(generatedResponse.message);
-    if (generatedResponse.debug) await message.channel.send(generatedResponse.debug);
-    if (generatedResponse.error) await message.channel.send(generatedResponse.error);
+    const channel = message.channel as Discord.TextChannel | Discord.ThreadChannel;
+    if (generatedResponse.message) await channel.send(generatedResponse.message);
+    if (generatedResponse.debug) await channel.send(generatedResponse.debug);
+    if (generatedResponse.error) await channel.send(generatedResponse.error);
   }
 }
 
