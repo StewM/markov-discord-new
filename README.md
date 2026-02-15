@@ -2,6 +2,9 @@
 
 A Markov chain bot using markov-strings.
 
+Note from Stew: This fork is to update all the packages and get it working again. I removed eslint because I was having problems getting npm to install the right updated packages and I don't care about having linting. I also updated a couple things about the discord.js implementation to get it working with the updated discord api. I also removed the code setting the bot's status because in my usecase I have some other code setting the status for my bot and don't want this stepping on it.
+
+
 ## Variant: random message sending
 Check `/config/config.json`
 

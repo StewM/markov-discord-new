@@ -67,15 +67,6 @@ const rest = new Discord.REST({ version: '10' }).setToken(config.token);
 const client = new Discord.Client<true>({
   failIfNotExists: false,
   intents: [Discord.GatewayIntentBits.GuildMessages, Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.MessageContent],
-  presence: {
-    activities: [
-      {
-        type: Discord.ActivityType.Playing,
-        name: config.activity,
-        url: packageJson().homepage,
-      },
-    ],
-  },
 });
 
 const markovOpts: MarkovConstructorOptions = {
@@ -842,8 +833,6 @@ client.on('messageCreate', async (message) => {
       if (await isValidChannel(message.channel)) {
         L.debug('Listening');
         const markov = await getMarkovByGuildId(message.channel.guildId);
-        console.log("adding a message");
-        console.log(message);
         await markov.addData([messageToData(message)]);
       }
     }
