@@ -10,8 +10,8 @@ import { DataSource } from 'typeorm';
 import { MarkovInputData } from 'markov-strings-db/dist/src/entity/MarkovInputData';
 import type { PackageJsonPerson } from 'types-package-json';
 import makeEta from 'simple-eta';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import addSeconds from 'date-fns/addSeconds';
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
+import { addSeconds } from 'date-fns/addSeconds';
 import L from './logger';
 import { Channel } from './entity/Channel';
 import { Guild } from './entity/Guild';
@@ -66,7 +66,7 @@ const rest = new Discord.REST({ version: '10' }).setToken(config.token);
 
 const client = new Discord.Client<true>({
   failIfNotExists: false,
-  intents: [Discord.GatewayIntentBits.GuildMessages, Discord.GatewayIntentBits.Guilds],
+  intents: [Discord.GatewayIntentBits.GuildMessages, Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.MessageContent],
   presence: {
     activities: [
       {
@@ -759,7 +759,7 @@ async function handleNoGuild(
   await interaction.followUp({ content: INVALID_GUILD_MESSAGE, ephemeral: true });
 }
 
-client.on('ready', async (readyClient) => {
+client.on('clientReady', async (readyClient) => {
   L.info({ inviteUrl: generateInviteUrl() }, 'Bot logged in');
 
   await deployCommands(readyClient.user.id);
@@ -842,6 +842,8 @@ client.on('messageCreate', async (message) => {
       if (await isValidChannel(message.channel)) {
         L.debug('Listening');
         const markov = await getMarkovByGuildId(message.channel.guildId);
+        console.log("adding a message");
+        console.log(message);
         await markov.addData([messageToData(message)]);
       }
     }
